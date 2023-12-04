@@ -28,12 +28,12 @@ if (!process.env.DISABLE_XORIGIN) {
     res.sendFile( __dirname + '/views/index.html');
   });
 
-  app.get("/now",function(req,res,next){
+  app.get("/now",(req,res,next) => {
     currentTime = new Date();
     req.time = currentTime.toString();
     next();
-  }, function(req,res){
-    res.json({"time" : req.time});
+  }, (req,res) => {
+    res.send({"time" : req.time});
   });
 
   app.get("/json" , (req, res) => {
