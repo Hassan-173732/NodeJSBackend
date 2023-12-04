@@ -28,23 +28,24 @@ if (!process.env.DISABLE_XORIGIN) {
     res.sendFile(__dirname + '/views/index.html');
   }); */
 
- function getDateTimeInString(){
+ /* function getDateTimeInString(){
   return new Date().toString();
- }
+ } */
 
 
  var delayInMilliseconds = 1000; //1 second
 
-setTimeout(function() {
-  //your code to be executed after 1 second
-  app.get("/now", function(req, res, next){
-    
-    req.time = getDateTimeInString();
-    next();
-  }, function(req, res){
-    res.json({ time: req.time });
-  });
-}, delayInMilliseconds);
+ app.get('/now', (req, res, next) => {
+      req.time = new Date().toString();
+      next()
+ }, (req, res) => {
+ setTimeout(function() {
+   //your code to be executed after 1 second
+     res.json({
+       'time': req.time
+     })
+ }, delayInMilliseconds);
+ });
 
  
 
