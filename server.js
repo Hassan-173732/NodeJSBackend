@@ -22,28 +22,32 @@ if (!process.env.DISABLE_XORIGIN) {
     next();
   });
 
-  app.use('/public', express.static(__dirname + '/public'));
+ /*  app.use('/public', express.static(__dirname + '/public'));
 
   app.get("/", (req, res) => {
     res.sendFile(__dirname + '/views/index.html');
-  });
+  }); */
 
-  app.get("/now", (req, res, next) => {
-    currentTime = new Date();
-    req.time = currentTime.toString();
+ function getDateTimeInString(){
+  return new Date().toString();
+ }
+
+  app.get("/now", function(req, res, next){
+    
+    req.time = getDateTimeInString();
     next();
-  }, (req, res) => {
-    res.send({"time": req.time});
+  }, function(req, res){
+    res.json({ time: req.time });
   });
 
-  app.get("/json", (req, res) => {
+ /*  app.get("/json", (req, res) => {
     var response = "Hello json";
     if (process.env.MESSAGE_STYLE === "uppercase") {
       res.json({"message": response.toUpperCase()});
     } else {
       res.json({"message": response});
     }
-  });
+  }); */
 }
 
 const port = process.env.PORT || 3000;
