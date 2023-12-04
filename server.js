@@ -22,11 +22,19 @@ if (!process.env.DISABLE_XORIGIN) {
     next();
   });
 
+  app.use('/public', express.static(__dirname + '/public'));
+
   app.get("/", (req, res) => {
     res.sendFile( __dirname + '/views/index.html');
   });
 
-  app.use('/public', express.static(__dirname + '/public'));
+  app.get("/now",function(req,res,next){
+    currentTime = new Date();
+    req.time = currentTime.toString();
+    next();
+  }, function(req,res){
+    res.json({"time" : req.time});
+  });
 
   app.get("/json" , (req, res) => {
     var response = "Hello json"
