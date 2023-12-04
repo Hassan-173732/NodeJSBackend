@@ -4,16 +4,24 @@ const express = require('express');
 const app = express();
 
 // Middleware for logging incoming requests
-app.use(function(req, res, next) {
+const loggingMiddleware = (req, res, next) => {
   console.log(req.method + ' ' + req.path + ' - ' + req.ip);
   next();
-});
+};
 
-// Middleware for logging middleware stack length
-app.use((req, res, next) => {
-  console.log("Middleware Stack Length:", app._router.stack.length);
+// Middleware for handling /now route
+const nowMiddleware = (req, res, next) => {
+  // Middleware 1: Logging middleware
+  req.time = new Date().toString();
   next();
-});
+};
+
+const nowHandler = (req, res) => {
+  // Middleware 2: Final handler
+  res.send({
+    time: req.time
+  });
+};
 
 if (!process.env.DISABLE_XORIGIN) {
   app.use((req, res, next) => {
@@ -30,25 +38,11 @@ if (!process.env.DISABLE_XORIGIN) {
 
   app.use('/public', express.static(__dirname + '/public'));
 
+  app.get("/now", nowMiddleware, nowHandler);
+
   app.get("/", (req, res) => {
     res.sendFile(__dirname + '/views/index.html');
   });
-
-  app.get(
-    "/now",
-    (req, res, next) => {
-      // Middleware 1: Logging middleware
-      req.time = new Date().toString();
-      next();
-    },
-    (req, res) => {
-      // Middleware 2: Final handler
-      res.send({
-        time: req.time,
-        stackLength: 2 // Ensure exactly two middleware functions
-      });
-    }
-  );
 
   app.get("/json", (req, res) => {
     var response = "Hello json";
