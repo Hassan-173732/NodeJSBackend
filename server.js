@@ -3,11 +3,7 @@ const myApp = require('./myApp');
 const express = require('express');
 const app = express();
 
-// Middleware for logging incoming requests
-const loggingMiddleware = (req, res, next) => {
-  console.log(req.method + ' ' + req.path + ' - ' + req.ip);
-  next();
-};
+
 
 
 
@@ -24,31 +20,12 @@ if (!process.env.DISABLE_XORIGIN) {
     next();
   });
 
-  app.use('/public', express.static(__dirname + '/public'));
-
-  const middleware = (req, res, next) => {
-    req.time = new Date().toString();
-    next();
-  };
+ 
   
-  app.get("/now", middleware, (req, res) => {
-    res.send({
-      time: req.time
-    });
-  });
+ 
 
-  app.get("/", (req, res) => {
-    res.sendFile(__dirname + '/views/index.html');
-  });
-
-  app.get("/json", (req, res) => {
-    var response = "Hello json";
-    if (process.env.MESSAGE_STYLE === "uppercase") {
-      res.json({"message": response.toUpperCase()});
-    } else {
-      res.json({"message": response});
-    }
-  });
+  
+ 
 }
 
 const port = process.env.PORT || 3000;
