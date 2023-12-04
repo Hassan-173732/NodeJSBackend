@@ -37,13 +37,15 @@ if (!process.env.DISABLE_XORIGIN) {
   app.get(
     "/now",
     (req, res, next) => {
+      // Middleware 1: Logging middleware
       req.time = new Date().toString();
       next();
     },
     (req, res) => {
+      // Middleware 2: Final handler
       res.send({
         time: req.time,
-        stackLength: 2 // Exclude the logging middleware// Include middleware stack length in the response
+        stackLength: 2 // Ensure exactly two middleware functions
       });
     }
   );
