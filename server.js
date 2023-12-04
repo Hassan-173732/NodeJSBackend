@@ -9,19 +9,7 @@ const loggingMiddleware = (req, res, next) => {
   next();
 };
 
-// Middleware for handling /now route
-const nowMiddleware = (req, res, next) => {
-  // Middleware 1: Logging middleware
-  req.time = new Date().toString();
-  next();
-};
 
-const nowHandler = (req, res) => {
-  // Middleware 2: Final handler
-  res.send({
-    time: req.time
-  });
-};
 
 if (!process.env.DISABLE_XORIGIN) {
   app.use((req, res, next) => {
@@ -38,7 +26,16 @@ if (!process.env.DISABLE_XORIGIN) {
 
   app.use('/public', express.static(__dirname + '/public'));
 
-  app.get("/now", nowMiddleware, nowHandler);
+  const middleware = (req, res, next) => {
+    req.time = new Date().toString();
+    next();
+  };
+  
+  app.get("/now", middleware, (req, res) => {
+    res.send({
+      time: req.time
+    });
+  });
 
   app.get("/", (req, res) => {
     res.sendFile(__dirname + '/views/index.html');
