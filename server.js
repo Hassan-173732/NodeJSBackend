@@ -4,8 +4,14 @@ const express = require('express');
 const app = express();
 
 // Middleware for logging incoming requests
-app.use(function(req, res, next){
+app.use(function(req, res, next) {
   console.log(req.method + ' ' + req.path + ' - ' + req.ip);
+  next();
+});
+
+// Middleware for logging middleware stack length
+app.use((req, res, next) => {
+  console.log("Middleware Stack Length:", app._router.stack.length);
   next();
 });
 
@@ -22,38 +28,34 @@ if (!process.env.DISABLE_XORIGIN) {
     next();
   });
 
- /*  app.use('/public', express.static(__dirname + '/public'));
+  app.use('/public', express.static(__dirname + '/public'));
 
   app.get("/", (req, res) => {
     res.sendFile(__dirname + '/views/index.html');
-  }); */
+  });
 
- 
+  app.get(
+    "/now",
+    (req, res, next) => {
+      req.time = new Date().toString();
+      next();
+    },
+    (req, res) => {
+      res.send({
+        time: req.time,
+        stackLength: app._router.stack.length // Include middleware stack length in the response
+      });
+    }
+  );
 
-
- 
-
- app.get(
-  "/now",
-  (req, res, next) => {
-    req.time = new Date().toString();
-    next();
-  },
-  (req, res) => {
-    res.send({
-      time: req.time
-    });
-  }
-);
-
- /*  app.get("/json", (req, res) => {
+  app.get("/json", (req, res) => {
     var response = "Hello json";
     if (process.env.MESSAGE_STYLE === "uppercase") {
       res.json({"message": response.toUpperCase()});
     } else {
       res.json({"message": response});
     }
-  }); */
+  });
 }
 
 const port = process.env.PORT || 3000;
