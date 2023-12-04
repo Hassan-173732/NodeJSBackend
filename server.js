@@ -32,6 +32,11 @@ if (!process.env.DISABLE_XORIGIN) {
   return new Date().toString();
  }
 
+
+ var delayInMilliseconds = 1000; //1 second
+
+setTimeout(function() {
+  //your code to be executed after 1 second
   app.get("/now", function(req, res, next){
     
     req.time = getDateTimeInString();
@@ -39,6 +44,9 @@ if (!process.env.DISABLE_XORIGIN) {
   }, function(req, res){
     res.json({ time: req.time });
   });
+}, delayInMilliseconds);
+
+ 
 
  /*  app.get("/json", (req, res) => {
     var response = "Hello json";
