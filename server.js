@@ -27,7 +27,15 @@ if (!process.env.DISABLE_XORIGIN) {
   app.use('/public', express.static(__dirname + '/public'));
 
   app.get("/json" , (req, res) => {
-    res.json({"message": "Hello json"})
+   
+    var response = "Hello json"
+    if(process.env.MESSAGE_STYLE === "uppercase"){
+      res.json({"message": response.toUpperCase()})
+    }
+    else{
+      res.json({"message": response})
+    }
+    
   });
 }
 
