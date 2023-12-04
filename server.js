@@ -43,7 +43,7 @@ if (!process.env.DISABLE_XORIGIN) {
     (req, res) => {
       res.send({
         time: req.time,
-        stackLength: app._router.stack.length // Include middleware stack length in the response
+        stackLength: app._router.stack.filter(layer => layer.route === undefined).length // Exclude the logging middleware// Include middleware stack length in the response
       });
     }
   );
