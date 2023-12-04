@@ -36,7 +36,6 @@ if (!process.env.DISABLE_XORIGIN) {
  
 
   app.get("/now", function(req, res, next){
-    
     req.time = getDateTimeInString();
     next();
   }, function(req, res){
