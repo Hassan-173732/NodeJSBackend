@@ -28,19 +28,23 @@ if (!process.env.DISABLE_XORIGIN) {
     res.sendFile(__dirname + '/views/index.html');
   }); */
 
- function getDateTimeInString(){
-  return new Date().toString();
- }
+ 
 
 
  
 
-  app.get("/now", function(req, res, next){
-    req.time = getDateTimeInString();
+ app.get(
+  "/now",
+  (req, res, next) => {
+    req.time = new Date().toString();
     next();
-  }, function(req, res){
-    res.json({ "time": req.time });
-  });
+  },
+  (req, res) => {
+    res.send({
+      time: req.time
+    });
+  }
+);
 
  /*  app.get("/json", (req, res) => {
     var response = "Hello json";
