@@ -18,6 +18,9 @@ app.get("/now",function(req, res, next){
     }
   );
 
+  app.post("/name",function(req,res,next){
+    res.json({"name": req.body.first + " " + req.body.last});
+  });
 
 app.get("/:word/echo",function(req,res,next){
     res.json({"echo": req.params.word});
