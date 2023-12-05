@@ -1,11 +1,14 @@
 const bGround = require('fcc-express-bground');
 const myApp = require('./myApp');
 const express = require('express');
+let bodyParser = require('body-parser');
 const app = express();
 
 
 
 
+
+app.use(bodyParser.urlencoded({ extended: false }));
 
 if (!process.env.DISABLE_XORIGIN) {
   app.use((req, res, next) => {
